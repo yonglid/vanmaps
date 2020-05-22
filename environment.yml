@@ -1,0 +1,11 @@
+dependencies:
+  - bokeh
+  - pandas
+  - scipy
+  - geopandas
+  - gspread
+  - oauth2client
+  - json
+  - pip
+  - pip:
+    - jupyter-server-proxy

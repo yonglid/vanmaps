@@ -5,7 +5,6 @@ dependencies:
   - geopandas
   - gspread
   - oauth2client
-  - json
   - pip
   - pip:
     - jupyter-server-proxy

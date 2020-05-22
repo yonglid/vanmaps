@@ -38,16 +38,25 @@ class Chloropleth(object):
         self.figtitle = figtitle
         self.mapscale = mapscale
 
-    def create(self):
+    def create(self, qualitative=False):
         # Input GeoJSON source that contains features for plotting.
         geosource = GeoJSONDataSource(geojson=self.json_data)
-        # Instantiate LinearColorMapper that linearly maps numbers in a range, into a sequence of colors.
-        color_mapper = LinearColorMapper(palette=self.palette, low=self.mapscale[0], high=self.mapscale[1],nan_color = '#d9d9d9')
-        tick_labels = {str(self.mapscale[0]): '<' + str(self.mapscale[0]), str(self.mapscale[1]):'>' + str(self.mapscale[1])}
-        color_bar = ColorBar(color_mapper=color_mapper, label_standoff=8, width=int(400*1.5), height=20,
-                                 border_line_color=None, location=(0, 0), orientation='horizontal',major_label_overrides=tick_labels)
-        # Add hover tool
-        hover = HoverTool(tooltips=[('County', '@CNTY'), ('Precinct', '@Precinct'),(self.varname,'@'+self.varname)])
+        if qualitative:
+            color_mapper = LinearColorMapper(palette=['#d9d9d9','#31a354'], low=self.mapscale[0], high=self.mapscale[1],nan_color = '#d9d9d9')
+            tick_labels = {str(self.mapscale[0]): 'Not Done', str(self.mapscale[1]):'Done'}
+            color_bar = ColorBar(color_mapper=color_mapper,  width=int(400*1.5), height=20,
+                                     border_line_color=None, location=(0, 0), orientation='horizontal',major_label_overrides=tick_labels)
+            
+            # Add hover tool
+            hover = HoverTool(tooltips=[('County', '@CNTY'), ('Precinct', '@PREC')])
+        else:
+            # Instantiate LinearColorMapper that linearly maps numbers in a range, into a sequence of colors.
+            color_mapper = LinearColorMapper(palette=self.palette, low=self.mapscale[0], high=self.mapscale[1],nan_color = '#d9d9d9')
+            tick_labels = {str(self.mapscale[0]): '<' + str(self.mapscale[0]), str(self.mapscale[1]):'>' + str(self.mapscale[1])}
+            color_bar = ColorBar(color_mapper=color_mapper, label_standoff=8, width=int(400*1.5), height=20,
+                                     border_line_color=None, location=(0, 0), orientation='horizontal',major_label_overrides=tick_labels)
+            # Add hover tool
+            hover = HoverTool(tooltips=[('County', '@CNTY'), ('Precinct', '@PREC'),(self.varname,'@'+self.varname)])
         # Create figure object.
         p = figure(title=self.figtitle, plot_height=int(600*1.5), plot_width=int(500*1.5),
                    toolbar_location=None, tools=[hover])
